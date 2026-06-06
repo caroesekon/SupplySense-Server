@@ -4,6 +4,7 @@ dotenv.config();
 const env = {
   PORT: process.env.PORT || 5000,
   NODE_ENV: process.env.NODE_ENV || 'development',
+  BASE_URL: process.env.BASE_URL || 'http://localhost:5000',
   MONGODB_URI: process.env.MONGODB_URI,
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
@@ -25,19 +26,17 @@ const env = {
   AI_ENGINE_API_KEY: process.env.AI_ENGINE_API_KEY,
   CLIENT_APP_URL: process.env.CLIENT_APP_URL || 'http://localhost:3000',
   ADMIN_APP_URL: process.env.ADMIN_APP_URL || 'http://localhost:3001',
+  CORS_ORIGINS: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map(s => s.trim()).filter(Boolean) : [],
   LICENSE_KEY_PREFIX: process.env.LICENSE_KEY_PREFIX || 'SSS',
   TRIAL_DURATION_DAYS: process.env.TRIAL_DURATION_DAYS || 14,
   DEFAULT_CURRENCY: process.env.DEFAULT_CURRENCY || 'KSh',
-  ADMIN_INVITE_CODE: process.env.ADMIN_INVITE_CODE,
-  BASE_URL: process.env.BASE_URL || 'http://localhost:5000'
+  ADMIN_INVITE_CODE: process.env.ADMIN_INVITE_CODE
 };
 
 const requiredVars = [
   'MONGODB_URI',
   'JWT_SECRET',
-  'ENCRYPTION_KEY',
-  'BREVO_API_KEY',
-  'BREVO_SENDER_EMAIL'
+  'ENCRYPTION_KEY'
 ];
 
 for (const variable of requiredVars) {
