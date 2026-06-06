@@ -1,5 +1,3 @@
-import './dnsSet.js';
-
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -40,15 +38,17 @@ import clientBackupRoutes from './routes/client/clientBackupRoutes.js';
 import erpRoutes from './routes/client/erpRoutes.js';
 import landingRoutes from './routes/client/landingRoutes.js';
 
-
 import { startScheduler } from './services/syncScheduler.js';
 
 const app = express();
 
 connectDB();
 
-const allowedOrigins = [env.CLIENT_APP_URL, env.ADMIN_APP_URL].filter(Boolean);
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+const corsOrigins = env.CORS_ORIGINS.length > 0
+  ? env.CORS_ORIGINS
+  : [env.CLIENT_APP_URL, env.ADMIN_APP_URL].filter(Boolean);
+
+app.use(cors({ origin: corsOrigins, credentials: true }));
 app.use('/api/payment/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -122,7 +122,7 @@ app.listen(PORT, () => {
   console.log(`\x1b[36m   Client URL:  ${env.CLIENT_APP_URL}\x1b[0m`);
   console.log(`\x1b[36m   Admin URL:   ${env.ADMIN_APP_URL}\x1b[0m`);
   console.log(`\x1b[36m   AI Engine:   ${env.AI_ENGINE_URL}\x1b[0m`);
-  console.log(`\x1b[32m   CORS allowed origins:\x1b[0m ${allowedOrigins.join(', ')}\n`);
+  console.log(`\x1b[32m   CORS origins:\x1b[0m ${corsOrigins.join(', ')}\n`);
   startScheduler();
 });
 
